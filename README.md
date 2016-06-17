@@ -1,1 +1,3 @@
-#phaser-flappybird
+#Phaser-FlappyBird
+
+### 基于Phaser的FlappyBird
