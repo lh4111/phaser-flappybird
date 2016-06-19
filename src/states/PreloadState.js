@@ -25,12 +25,14 @@ export default class PreloadState extends Phaser.State {
         this.game.load.image('game_over','assets/gameover.png'); //gameover图片
         this.game.load.image('score_board','assets/scoreboard.png'); //得分板
 
+        this.game.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
+
         this.game.load.onFileComplete.add(this.fileComplete,text);
         this.game.load.onLoadComplete.add(this.loadComplete,text)
     }
 
     create() {
-        this.game.state.start('GameState')
+        this.game.state.start('MenuState')
     }
 
     fileComplete(progress, file_key, success, total_loaded_files, total_files) {
