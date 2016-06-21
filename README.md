@@ -1,6 +1,19 @@
 #Phaser-FlappyBird
 >基于Phaser的FlappyBird
 
+### 开始
+项目使用ES6开发,使用`gulp`构建。
+1.安装项目依赖
+```
+npm install
+```
+2.开发模式
+```
+npm start
+#或者
+gulp
+```
+
 ### TODO:
 - 全屏适配,提高大屏体验
 - 修改代码为全面向对象
