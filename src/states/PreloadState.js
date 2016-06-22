@@ -38,7 +38,7 @@ export default class PreloadState extends Phaser.State {
     }
 
     create() {
-        this.game.state.start('MenuState')
+        setTimeout(()=>this.game.state.start('MenuState'),1000)
     }
 
     fileComplete(progress, file_key, success, total_loaded_files, total_files) {
@@ -48,7 +48,7 @@ export default class PreloadState extends Phaser.State {
     }
 
     loadComplete() {
-        this.text.kill();
+        // this.text.kill();
         console.log('%cload finsh','color:#00ff00');
     }
 
