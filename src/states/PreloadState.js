@@ -3,9 +3,15 @@ export default class PreloadState extends Phaser.State {
 
     preload(){
         let center = { x: this.game.world.centerX, y: this.game.world.centerY };
-        let text = new Phaser.Text(this.game, center.x, center.y, "Loading...",{ font: "45px Arial", fill: "#ffffff", align: "center" });
-        text.anchor.set(0.5,1);
-        this.game.stage.addChild(text);
+        this.text = this.game.add.bitmapText(center.x, center.y, 'flappy_font', 'Loading:0', 24);
+        this.text.anchor.set(0.5,1);
+
+        this.rect = this.game.add.graphics(0,0);
+        this.rect.beginFill(0xFF700B, 1);
+        this.rect.drawRect((this.game.width - 240)/2, this.game.height - 200, 240, 20);
+        //
+        // this.game.stage.addChild(text);
+        // this.game.stage.addChild(rect);
 
         //以下为要加载的资源
         this.game.load.image('background','assets/background.png'); //游戏背景图
@@ -14,7 +20,7 @@ export default class PreloadState extends Phaser.State {
         this.game.load.spritesheet('bird','assets/bird.png',34,24,3); //鸟
         this.game.load.image('btn','assets/start-button.png');  //按钮
         this.game.load.spritesheet('pipe','assets/pipes.png',54,320,2); //管道
-        this.game.load.bitmapFont('flappy_font', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');//显示分数的字体
+        
         this.game.load.audio('fly_sound', 'assets/flap.wav');//飞翔的音效
         this.game.load.audio('score_sound', 'assets/score.wav');//得分的音效
         this.game.load.audio('hit_pipe_sound', 'assets/pipe-hit.wav'); //撞击管道的音效
@@ -27,8 +33,8 @@ export default class PreloadState extends Phaser.State {
 
         this.game.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
 
-        this.game.load.onFileComplete.add(this.fileComplete,text);
-        this.game.load.onLoadComplete.add(this.loadComplete,text)
+        this.game.load.onFileComplete.add(this.fileComplete,this);
+        this.game.load.onLoadComplete.add(this.loadComplete,this)
     }
 
     create() {
@@ -36,12 +42,13 @@ export default class PreloadState extends Phaser.State {
     }
 
     fileComplete(progress, file_key, success, total_loaded_files, total_files) {
-        this.text = '资源加载中... \t'+total_loaded_files+'/'+total_files
+        this.text.text = 'loading:'+total_loaded_files;
+        this.rect.scale.x = progress / 100;
         console.log('%cloading...'+progress+'  %c'+total_loaded_files+'/'+total_files,'color:#fe9900','color:#cdcdcd')
     }
 
     loadComplete() {
-        this.kill();
+        this.text.kill();
         console.log('%cload finsh','color:#00ff00');
     }
 

@@ -2,7 +2,7 @@
 export default class BootState extends Phaser.State {
 
     preload(){
-        this.game.load.image('loading','assets/preloader.gif'); //加载进度条图片资源
+        this.game.load.bitmapFont('flappy_font', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');//显示分数的字体
     }
 
     create() {
