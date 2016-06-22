@@ -42,7 +42,7 @@ export default class PreloadState extends Phaser.State {
     }
 
     fileComplete(progress, file_key, success, total_loaded_files, total_files) {
-        this.text.text = 'loading:'+total_loaded_files;
+        this.text.text = 'loading:'+progress;
         this.rect.scale.x = progress / 100;
         console.log('%cloading...'+progress+'  %c'+total_loaded_files+'/'+total_files,'color:#fe9900','color:#cdcdcd')
     }
