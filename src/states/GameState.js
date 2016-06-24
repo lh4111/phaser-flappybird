@@ -1,3 +1,4 @@
+import Bird from '../objects/Bird'
 
 export default class GameState extends Phaser.State {
 
@@ -6,24 +7,20 @@ export default class GameState extends Phaser.State {
 		this.pipeGroup = this.game.add.group();//用于存放管道的组，后面会讲到
 		this.pipeGroup.enableBody = true;
 		this.ground = this.game.add.tileSprite(0,this.game.height-112,this.game.width,112,'ground'); //地板，这里先不用移动，游戏开始后再动
-		this.bird = this.game.add.sprite(50,150,'bird'); //鸟
-		this.bird.animations.add('fly');//添加动画
-		this.bird.animations.play('fly',12,true);//播放动画
-		this.bird.anchor.setTo(0.5, 0.5); //设置中心点
-		this.game.physics.enable(this.bird,Phaser.Physics.ARCADE); //开启鸟的物理系统
-		this.bird.body.gravity.y = 0; //鸟的重力,未开始游戏，先让重力为0，不然鸟会掉下来
+
+		this.bird = new Bird(this.game,50,150);
+
 		this.game.physics.enable(this.ground,Phaser.Physics.ARCADE);//开启地面的物理系统
 		this.ground.body.immovable = true; //让地面在物理环境中固定不动
-
-		this.soundScore = this.game.add.sound('score_sound');
-		this.soundFly = this.game.add.sound('fly_sound');
-		this.soundHitPipe = this.game.add.sound('hit_pipe_sound');
-		this.soundHitGround = this.game.add.sound('hit_ground_sound');
 
 		this.readyText = this.game.add.image(this.game.width/2, 40, 'ready_text'); //get ready 文字
 		this.playTip = this.game.add.image(this.game.width/2,300,'play_tip'); //提示点击屏幕的图片
 		this.readyText.anchor.setTo(0.5, 0);
 		this.playTip.anchor.setTo(0.5, 0);
+
+		this.soundScore = this.game.add.sound('score_sound');
+		this.soundHitPipe = this.game.add.sound('hit_pipe_sound');
+		this.soundHitGround = this.game.add.sound('hit_ground_sound');
 
 		this.hasStarted = false; //游戏是否已开始
 		this.game.time.events.loop(900, this.generatePipes, this); //利用时钟事件来循环产生管道
@@ -77,14 +74,8 @@ export default class GameState extends Phaser.State {
 		this.scoreText = this.game.add.bitmapText(this.game.width/2, 100, 'flappy_font', '0', 64);
 		this.scoreText.anchor.x = 0.5;
 		this.scoreText.anchor.y = 0.5;
-		this.game.input.onDown.add(this.fly, this); //给鼠标按下事件绑定鸟的飞翔动作
+		this.bird.enableInput();
 		this.game.time.events.start(); //启动时钟事件，开始制造管道
-	}
-
-	fly(){
-		this.bird.body.velocity.y = -350; //飞翔，实质上就是给鸟设一个向上的速度
-		this.game.add.tween(this.bird).to({angle:-30}, 100, null, true, 0, 0, false); //上升时头朝上的动画
-		this.soundFly.play(); //播放飞翔的音效
 	}
 
 	checkScore(pipe){
@@ -120,14 +111,12 @@ export default class GameState extends Phaser.State {
 			pipe.body.velocity.x = 0;
 		}, this);
 		this.bird.animations.stop('fly', 0);
-		let gray = this.game.add.filter('Gray');
-		this.bird.filters = [gray];
-		this.game.input.onDown.remove(this.fly,this);
+		this.bird.die();
+		this.bird.disableInput();
 		this.game.time.events.stop(true);
 	}
 
 	gameOver(){
-
 		this.gameIsOver = true;
 		this.stopGame();
 		if(this.show_text) this.showGameOverText();
