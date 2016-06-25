@@ -71,7 +71,7 @@ export default class GameState extends Phaser.State {
 		this.bird.body.gravity.y = 1150; //给鸟设一个重力
 		this.readyText.destroy(); //去除 'get ready' 图片
 		this.playTip.destroy(); //去除 '玩法提示 图片
-		this.scoreText = this.game.add.bitmapText(this.game.width/2, 100, 'flappy_font', '0', 64);
+		this.scoreText = this.game.add.bitmapText(this.game.width/2, 100, 'flappy_font', '0', 48);
 		this.scoreText.anchor.x = 0.5;
 		this.scoreText.anchor.y = 0.5;
 		this.bird.enableInput();
@@ -148,6 +148,4 @@ export default class GameState extends Phaser.State {
 		if(this.bird.angle < 90) this.bird.angle += 2.5; //下降时鸟的头朝下的动画
 		this.pipeGroup.forEachExists(this.checkScore,this); //分数检测和更新
 	}
-
-
 }
